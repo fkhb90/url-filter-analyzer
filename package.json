@@ -1,0 +1,52 @@
+{
+  "name": "url-filter-analyzer",
+  "version": "0.1.0",
+  "description": "Lint, test, diff, and analyze ad-block / URL filter lists (Adblock Plus, uBlock Origin, AdGuard, and hosts syntax) from the command line.",
+  "bin": {
+    "ufa": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "adblock",
+    "ublock",
+    "adguard",
+    "filter-list",
+    "easylist",
+    "hosts",
+    "url-filter",
+    "privacy",
+    "cli",
+    "linter"
+  ],
+  "license": "MIT",
+  "author": "fkhb90",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fkhb90/url-filter-analyzer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fkhb90/url-filter-analyzer/issues"
+  },
+  "homepage": "https://github.com/fkhb90/url-filter-analyzer#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.4.0"
+  }
+}
