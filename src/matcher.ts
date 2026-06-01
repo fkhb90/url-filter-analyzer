@@ -51,10 +51,22 @@ export function ruleToRegex(pattern: string): RegExp {
     }
 
     let out = '';
-    for (const ch of body) {
-        if (ch === '*') out += '.*';
-        else if (ch === '^') out += SEPARATOR;
-        else out += ch.replace(REGEX_SPECIALS, '\\$&');
+    let literalStart = 0;
+
+    // Escape contiguous literal slices in one shot instead of per-character.
+    // This keeps behavior identical while reducing replace() calls on long rules.
+    for (let i = 0; i < body.length; i++) {
+        const ch = body[i];
+        if (ch !== '*' && ch !== '^') continue;
+
+        if (literalStart < i) {
+            out += body.slice(literalStart, i).replace(REGEX_SPECIALS, '\\$&');
+        }
+        out += ch === '*' ? '.*' : SEPARATOR;
+        literalStart = i + 1;
+    }
+    if (literalStart < body.length) {
+        out += body.slice(literalStart).replace(REGEX_SPECIALS, '\\$&');
     }
 
     if (domainAnchor) {
