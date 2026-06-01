@@ -1,0 +1,22 @@
+! Title: url-filter-analyzer sample list
+! Description: A tiny mixed-syntax list used in the README examples and tests.
+! Homepage: https://github.com/fkhb90/url-filter-analyzer
+!
+! --- Network blocking rules (Adblock Plus syntax) ---
+||ads.example.com^
+||tracking.example.net^
+||doubleclick.net^
+||analytics.example.org^$third-party
+
+! --- Exception (allow) rule ---
+@@||analytics.example.org/public^
+
+! --- hosts-file entries ---
+0.0.0.0 tracker.test
+127.0.0.1 telemetry.test
+
+! --- cosmetic / element-hiding rule (ignored by the network matcher) ---
+example.com##.ad-banner
+
+! --- An intentional duplicate, so `ufa lint` has something to report ---
+||ads.example.com^
