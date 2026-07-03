@@ -1,11 +1,20 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { parse } from './parser';
 import { lint } from './linter';
 import { matchUrl } from './matcher';
 import { stats, diff } from './stats';
 
-const VERSION = '0.1.0';
+function readPackageVersion(): string {
+    const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8')) as {
+        version?: unknown;
+    };
+    if (typeof pkg.version !== 'string') throw new Error('package.json version is missing');
+    return pkg.version;
+}
+
+export const VERSION = readPackageVersion();
 
 const HELP = `url-filter-analyzer (ufa) v${VERSION}
 
@@ -65,7 +74,7 @@ function out(json: boolean, data: unknown, human: () => void): void {
     else human();
 }
 
-function main(argv: string[]): number {
+export function main(argv: string[]): number {
     const args = parseArgs(argv);
 
     switch (args.command) {
@@ -146,10 +155,12 @@ function main(argv: string[]): number {
     }
 }
 
-try {
-    process.exit(main(process.argv.slice(2)));
-} catch (err) {
-    // Surface failures loudly with a non-zero exit — never swallow them.
-    console.error(`error: ${err instanceof Error ? err.message : String(err)}`);
-    process.exit(2);
+if (require.main === module) {
+    try {
+        process.exit(main(process.argv.slice(2)));
+    } catch (err) {
+        // Surface failures loudly with a non-zero exit — never swallow them.
+        console.error(`error: ${err instanceof Error ? err.message : String(err)}`);
+        process.exit(2);
+    }
 }
